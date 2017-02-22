@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+<!doctype html>
+<head>
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+    <meta content="utf-8" http-equiv="encoding">
+</head>
+<title>Parallel Coordinates Graduation Stephanie Case Study 1</title>
+
+<link rel="stylesheet" type="text/css" href="css/d3.parcoords.css">
+<script src="js/d3.js"></script>
+<script src="js/d3.svg.multibrush.js"></script>
+<script src="js/sylvester.js"></script>
+<script src="js/underscore.js"></script>
+<script src="js/slickgrid/jquery-1.7.min.js"></script>
+<script src="js/underscore.js"></script>
+<script src="js/underscore.math.js"></script>
+<script src="js/d3.parcoords.js"></script>
+
+<body>
+<div id="example" class="parcoords" style="width:3000px;height:700px"></div>
+</body>
+<script>
+    // load csv file and create the chart
+
+    var data = 
+[
+  {
+     '# wachtenden bijschakelen':17.00
+    ,'% klanttijd':72.00
+    ,'overwerk':0.00
+    ,'ASA afschakelen':60.00
+    ,'# dagen overwerk':2.79
+    ,'# druktemoment per dag':13.64
+    ,'# switchen per dag':7.52
+    ,'abandon rate call':4.89
+    ,'fte vast':66.29
+    ,'ASA':158.48
+    ,'kosten overuren':2349.11
+    ,'kosten vast':1623326.32
+    ,'maximale wachttijd per dag van call':2675.92
+    ,'overuren':73.41
+    ,'tijd switchen per keer':0.90
+    ,'wachttijd (dagen) per verzoek':1.00
+  },
+  {
+     '# wachtenden bijschakelen':4.00
+    ,'% klanttijd':99.00
+    ,'overwerk':1.00
+    ,'ASA afschakelen':33.00
+    ,'# dagen overwerk':2.79
+    ,'# druktemoment per dag':13.69
+    ,'# switchen per dag':7.65
+    ,'abandon rate call':4.94
+    ,'fte vast':55.59
+    ,'ASA':158.35
+    ,'kosten overuren':2349.11
+    ,'kosten vast':1261293.13
+    ,'maximale wachttijd per dag van call':2708.00
+    ,'overuren':73.41
+    ,'tijd switchen per keer':0.90
+    ,'wachttijd (dagen) per verzoek':1.00
+  },
+  {
+     '# wachtenden bijschakelen':14.00
+    ,'% klanttijd':90.00
+    ,'overwerk':0.00
+    ,'ASA afschakelen':53.00
+    ,'# dagen overwerk':2.79
+    ,'# druktemoment per dag':13.77
+    ,'# switchen per dag':7.52
+    ,'abandon rate call':5.05
+    ,'fte vast':54.08
+    ,'ASA':160.89
+    ,'kosten overuren':2349.11
+    ,'kosten vast':1156547.04
+    ,'maximale wachttijd per dag van call':2696.51
+    ,'overuren':73.41
+    ,'tijd switchen per keer':0.90
+    ,'wachttijd (dagen) per verzoek':1.00
+  },
+  {
+     '# wachtenden bijschakelen':1.00
+    ,'% klanttijd':76.00
+    ,'overwerk':1.00
+    ,'ASA afschakelen':39.00
+    ,'# dagen overwerk':2.79
+    ,'# druktemoment per dag':14.35
+    ,'# switchen per dag':16.62
+    ,'abandon rate call':5.24
+    ,'fte vast':52.01
+    ,'ASA':171.16
+    ,'kosten overuren':2349.11
+    ,'kosten vast':1025723.45
+    ,'maximale wachttijd per dag van call':2889.17
+    ,'overuren':73.41
+    ,'tijd switchen per keer':0.33
+    ,'wachttijd (dagen) per verzoek':1.00
+  },
+  {
+     '# wachtenden bijschakelen':18.00
+    ,'% klanttijd':95.00
+    ,'overwerk':1.00
+    ,'ASA afschakelen':42.00
+    ,'# dagen overwerk':2.79
+    ,'# druktemoment per dag':13.77
+    ,'# switchen per dag':7.52
+    ,'abandon rate call':5.00
+    ,'fte vast':53.94
+    ,'ASA':160.19
+    ,'kosten overuren':2349.11
+    ,'kosten vast':1163250.09
+    ,'maximale wachttijd per dag van call':2758.97
+    ,'overuren':73.41
+    ,'tijd switchen per keer':0.90
+    ,'wachttijd (dagen) per verzoek':1.00
+  },
+  {
+     '# wachtenden bijschakelen':3.00
+    ,'% klanttijd':92.00
+    ,'overwerk':1.00
+    ,'ASA afschakelen':55.00
+    ,'# dagen overwerk':2.79
+    ,'# druktemoment per dag':14.18
+    ,'# switchen per dag':11.38
+    ,'abandon rate call':5.38
+    ,'fte vast':49.55
+    ,'ASA':167.07
+    ,'kosten overuren':2349.11
+    ,'kosten vast':965536.28
+    ,'maximale wachttijd per dag van call':2764.34
+    ,'overuren':73.41
+    ,'tijd switchen per keer':0.69
+    ,'wachttijd (dagen) per verzoek':1.00
+  },
+  {
+     '# wachtenden bijschakelen':19.00
+    ,'% klanttijd':71.00
+    ,'overwerk':1.00
+    ,'ASA afschakelen':71.00
+    ,'# dagen overwerk':2.79
+    ,'# druktemoment per dag':14.14
+    ,'# switchen per dag':7.52
+    ,'abandon rate call':5.20
+    ,'fte vast':57.77
+    ,'ASA':162.76
+    ,'kosten overuren':2349.11
+    ,'kosten vast':1229307.61
+    ,'maximale wachttijd per dag van call':2759.50
+    ,'overuren':73.41
+    ,'tijd switchen per keer':0.90
+    ,'wachttijd (dagen) per verzoek':1.00
+  },
+  {
+     '# wachtenden bijschakelen':8.00
+    ,'% klanttijd':84.00
+    ,'overwerk':1.00
+    ,'ASA afschakelen':35.00
+    ,'# dagen overwerk':2.93
+    ,'# druktemoment per dag':16.30
+    ,'# switchen per dag':8.04
+    ,'abandon rate call':6.43
+    ,'fte vast':50.60
+    ,'ASA':191.41
+    ,'kosten overuren':2402.11
+    ,'kosten vast':979054.19
+    ,'maximale wachttijd per dag van call':3131.55
+    ,'overuren':75.07
+    ,'tijd switchen per keer':0.89
+    ,'wachttijd (dagen) per verzoek':1.00
+  },
+  {
+     '# wachtenden bijschakelen':18.00
+    ,'% klanttijd':77.00
+    ,'overwerk':1.00
+    ,'ASA afschakelen':51.00
+    ,'# dagen overwerk':2.79
+    ,'# druktemoment per dag':15.85
+    ,'# switchen per dag':7.52
+    ,'abandon rate call':5.80
+    ,'fte vast':53.30
+    ,'ASA':169.56
+    ,'kosten overuren':2349.11
+    ,'kosten vast':1069518.75
+    ,'maximale wachttijd per dag van call':2848.99
+    ,'overuren':73.41
+    ,'tijd switchen per keer':0.90
+    ,'wachttijd (dagen) per verzoek':1.00
+  },
+  {
+     '# wachtenden bijschakelen':16.00
+    ,'% klanttijd':99.00
+    ,'overwerk':1.00
+    ,'ASA afschakelen':66.00
+    ,'# dagen overwerk':2.79
+    ,'# druktemoment per dag':13.61
+    ,'# switchen per dag':7.52
+    ,'abandon rate call':4.69
+    ,'fte vast':64.69
+    ,'ASA':152.24
+    ,'kosten overuren':2349.11
+    ,'kosten vast':1728222.07
+    ,'maximale wachttijd per dag van call':2065.50
+    ,'overuren':73.41
+    ,'tijd switchen per keer':0.90
+    ,'wachttijd (dagen) per verzoek':1.00
+  },
+  {
+     '# wachtenden bijschakelen':13.00
+    ,'% klanttijd':89.00
+    ,'overwerk':1.00
+    ,'ASA afschakelen':25.00
+    ,'# dagen overwerk':2.79
+    ,'# druktemoment per dag':13.65
+    ,'# switchen per dag':7.52
+    ,'abandon rate call':4.98
+    ,'fte vast':61.31
+    ,'ASA':158.86
+    ,'kosten overuren':2349.11
+    ,'kosten vast':1493932.12
+    ,'maximale wachttijd per dag van call':2741.61
+    ,'overuren':73.41
+    ,'tijd switchen per keer':0.90
+    ,'wachttijd (dagen) per verzoek':1.00
+  },
+  {
+     '# wachtenden bijschakelen':7.00
+    ,'% klanttijd':88.00
+    ,'overwerk':0.00
+    ,'ASA afschakelen':70.00
+    ,'# dagen overwerk':2.79
+    ,'# druktemoment per dag':13.61
+    ,'# switchen per dag':7.52
+    ,'abandon rate call':4.69
+    ,'fte vast':68.93
+    ,'ASA':152.24
+    ,'kosten overuren':2349.11
+    ,'kosten vast':1887810.54
+    ,'maximale wachttijd per dag van call':2065.50
+    ,'overuren':73.41
+    ,'tijd switchen per keer':0.90
+    ,'wachttijd (dagen) per verzoek':1.00
+  },
+  {
+     '# wachtenden bijschakelen':9.00
+    ,'% klanttijd':70.00
+    ,'overwerk':0.00
+    ,'ASA afschakelen':24.00
+    ,'# dagen overwerk':2.79
+    ,'# druktemoment per dag':13.61
+    ,'# switchen per dag':7.52
+    ,'abandon rate call':4.88
+    ,'fte vast':73.22
+    ,'ASA':158.96
+    ,'kosten overuren':2349.11
+    ,'kosten vast':1956975.26
+    ,'maximale wachttijd per dag van call':2742.91
+    ,'overuren':73.41
+    ,'tijd switchen per keer':0.90
+    ,'wachttijd (dagen) per verzoek':1.00
+  },
+  {
+     '# wachtenden bijschakelen':3.00
+    ,'% klanttijd':82.00
+    ,'overwerk':1.00
+    ,'ASA afschakelen':20.00
+    ,'# dagen overwerk':2.79
+    ,'# druktemoment per dag':13.61
+    ,'# switchen per dag':7.52
+    ,'abandon rate call':4.88
+    ,'fte vast':69.13
+    ,'ASA':158.10
+    ,'kosten overuren':2349.11
+    ,'kosten vast':1839160.49
+    ,'maximale wachttijd per dag van call':2758.89
+    ,'overuren':73.41
+    ,'tijd switchen per keer':0.90
+    ,'wachttijd (dagen) per verzoek':1.00
+  },
+  {
+     '# wachtenden bijschakelen':12.00
+    ,'% klanttijd':89.00
+    ,'overwerk':0.00
+    ,'ASA afschakelen':90.00
+    ,'# dagen overwerk':2.79
+    ,'# druktemoment per dag':14.04
+    ,'# switchen per dag':7.52
+    ,'abandon rate call':5.01
+    ,'fte vast':53.27
+    ,'ASA':161.16
+    ,'kosten overuren':2349.11
+    ,'kosten vast':1119975.32
+    ,'maximale wachttijd per dag van call':2783.15
+    ,'overuren':73.41
+    ,'tijd switchen per keer':0.90
+    ,'wachttijd (dagen) per verzoek':1.00
+  },
+  {
+     '# wachtenden bijschakelen':5.00
+    ,'% klanttijd':89.00
+    ,'overwerk':0.00
+    ,'ASA afschakelen':45.00
+    ,'# dagen overwerk':2.79
+    ,'# druktemoment per dag':13.61
+    ,'# switchen per dag':7.52
+    ,'abandon rate call':4.88
+    ,'fte vast':64.17
+    ,'ASA':158.96
+    ,'kosten overuren':2349.11
+    ,'kosten vast':1635584.72
+    ,'maximale wachttijd per dag van call':2742.91
+    ,'overuren':73.41
+    ,'tijd switchen per keer':0.90
+    ,'wachttijd (dagen) per verzoek':1.00
+  },
+  {
+     '# wachtenden bijschakelen':15.00
+    ,'% klanttijd':84.00
+    ,'overwerk':0.00
+    ,'ASA afschakelen':82.00
+    ,'# dagen overwerk':2.79
+    ,'# druktemoment per dag':13.64
+    ,'# switchen per dag':7.52
+    ,'abandon rate call':4.89
+    ,'fte vast':61.22
+    ,'ASA':158.48
+    ,'kosten overuren':2349.11
+    ,'kosten vast':1455924.60
+    ,'maximale wachttijd per dag van call':2675.92
+    ,'overuren':73.41
+    ,'tijd switchen per keer':0.90
+    ,'wachttijd (dagen) per verzoek':1.00
+  },
+  {
+     '# wachtenden bijschakelen':19.00
+    ,'% klanttijd':94.00
+    ,'overwerk':1.00
+    ,'ASA afschakelen':92.00
+    ,'# dagen overwerk':2.79
+    ,'# druktemoment per dag':13.77
+    ,'# switchen per dag':7.52
+    ,'abandon rate call':5.05
+    ,'fte vast':53.09
+    ,'ASA':160.89
+    ,'kosten overuren':2349.11
+    ,'kosten vast':1126545.65
+    ,'maximale wachttijd per dag van call':2696.51
+    ,'overuren':73.41
+    ,'tijd switchen per keer':0.90
+    ,'wachttijd (dagen) per verzoek':1.00
+  },
+  {
+     '# wachtenden bijschakelen':6.00
+    ,'% klanttijd':86.00
+    ,'overwerk':1.00
+    ,'ASA afschakelen':74.00
+    ,'# dagen overwerk':3.29
+    ,'# druktemoment per dag':18.11
+    ,'# switchen per dag':10.56
+    ,'abandon rate call':5.96
+    ,'fte vast':45.68
+    ,'ASA':222.21
+    ,'kosten overuren':2708.59
+    ,'kosten vast':717764.02
+    ,'maximale wachttijd per dag van call':2849.18
+    ,'overuren':84.64
+    ,'tijd switchen per keer':0.92
+    ,'wachttijd (dagen) per verzoek':1.00
+  },
+  {
+     '# wachtenden bijschakelen':9.00
+    ,'% klanttijd':98.00
+    ,'overwerk':1.00
+    ,'ASA afschakelen':95.00
+    ,'# dagen overwerk':2.79
+    ,'# druktemoment per dag':13.61
+    ,'# switchen per dag':7.52
+    ,'abandon rate call':4.81
+    ,'fte vast':63.41
+    ,'ASA':158.15
+    ,'kosten overuren':2349.11
+    ,'kosten vast':1655487.24
+    ,'maximale wachttijd per dag van call':2731.14
+    ,'overuren':73.41
+    ,'tijd switchen per keer':0.90
+    ,'wachttijd (dagen) per verzoek':1.00
+  },
+  {
+     '# wachtenden bijschakelen':1.00
+    ,'% klanttijd':71.00
+    ,'overwerk':0.00
+    ,'ASA afschakelen':64.00
+    ,'# dagen overwerk':2.79
+    ,'# druktemoment per dag':13.68
+    ,'# switchen per dag':7.54
+    ,'abandon rate call':4.93
+    ,'fte vast':75.20
+    ,'ASA':158.07
+    ,'kosten overuren':2349.11
+    ,'kosten vast':2054147.93
+    ,'maximale wachttijd per dag van call':2710.69
+    ,'overuren':73.41
+    ,'tijd switchen per keer':0.90
+    ,'wachttijd (dagen) per verzoek':1.00
+  },
+  {
+     '# wachtenden bijschakelen':0.00
+    ,'% klanttijd':85.00
+    ,'overwerk':0.00
+    ,'ASA afschakelen':27.00
+    ,'# dagen overwerk':2.79
+    ,'# druktemoment per dag':13.61
+    ,'# switchen per dag':7.60
+    ,'abandon rate call':4.86
+    ,'fte vast':62.79
+    ,'ASA':158.03
+    ,'kosten overuren':2349.11
+    ,'kosten vast':1542987.08
+    ,'maximale wachttijd per dag van call':2765.37
+    ,'overuren':73.41
+    ,'tijd switchen per keer':0.90
+    ,'wachttijd (dagen) per verzoek':1.00
+  },
+  {
+     '# wachtenden bijschakelen':13.00
+    ,'% klanttijd':94.00
+    ,'overwerk':0.00
+    ,'ASA afschakelen':47.00
+    ,'# dagen overwerk':2.79
+    ,'# druktemoment per dag':13.64
+    ,'# switchen per dag':7.52
+    ,'abandon rate call':4.89
+    ,'fte vast':57.99
+    ,'ASA':158.48
+    ,'kosten overuren':2349.11
+    ,'kosten vast':1349072.44
+    ,'maximale wachttijd per dag van call':2675.92
+    ,'overuren':73.41
+    ,'tijd switchen per keer':0.90
+    ,'wachttijd (dagen) per verzoek':1.00
+  },
+  {
+     '# wachtenden bijschakelen':7.00
+    ,'% klanttijd':95.00
+    ,'overwerk':1.00
+    ,'ASA afschakelen':36.00
+    ,'# dagen overwerk':2.79
+    ,'# druktemoment per dag':13.73
+    ,'# switchen per dag':7.54
+    ,'abandon rate call':5.01
+    ,'fte vast':59.42
+    ,'ASA':158.63
+    ,'kosten overuren':2349.11
+    ,'kosten vast':1428095.20
+    ,'maximale wachttijd per dag van call':2716.18
+    ,'overuren':73.41
+    ,'tijd switchen per keer':0.90
+    ,'wachttijd (dagen) per verzoek':1.00
+  },
+  {
+     '# wachtenden bijschakelen':0.00
+    ,'% klanttijd':76.00
+    ,'overwerk':0.00
+    ,'ASA afschakelen':81.00
+    ,'# dagen overwerk':2.79
+    ,'# druktemoment per dag':18.19
+    ,'# switchen per dag':22.86
+    ,'abandon rate call':6.10
+    ,'fte vast':48.27
+    ,'ASA':213.28
+    ,'kosten overuren':2349.11
+    ,'kosten vast':787355.76
+    ,'maximale wachttijd per dag van call':4057.36
+    ,'overuren':73.41
+    ,'tijd switchen per keer':0.45
+    ,'wachttijd (dagen) per verzoek':0.97
+  },
+  {
+     '# wachtenden bijschakelen':5.00
+    ,'% klanttijd':80.00
+    ,'overwerk':1.00
+    ,'ASA afschakelen':66.00
+    ,'# dagen overwerk':2.79
+    ,'# druktemoment per dag':13.73
+    ,'# switchen per dag':7.68
+    ,'abandon rate call':4.94
+    ,'fte vast':63.44
+    ,'ASA':159.63
+    ,'kosten overuren':2349.11
+    ,'kosten vast':1558674.62
+    ,'maximale wachttijd per dag van call':2766.31
+    ,'overuren':73.41
+    ,'tijd switchen per keer':0.90
+    ,'wachttijd (dagen) per verzoek':1.00
+  },
+  {
+     '# wachtenden bijschakelen':0.00
+    ,'% klanttijd':83.00
+    ,'overwerk':0.00
+    ,'ASA afschakelen':46.00
+    ,'# dagen overwerk':2.79
+    ,'# druktemoment per dag':13.64
+    ,'# switchen per dag':7.52
+    ,'abandon rate call':4.86
+    ,'fte vast':67.68
+    ,'ASA':157.60
+    ,'kosten overuren':2349.11
+    ,'kosten vast':1771811.02
+    ,'maximale wachttijd per dag van call':2700.02
+    ,'overuren':73.41
+    ,'tijd switchen per keer':0.90
+    ,'wachttijd (dagen) per verzoek':1.00
+  },
+  {
+     '# wachtenden bijschakelen':4.00
+    ,'% klanttijd':93.00
+    ,'overwerk':1.00
+    ,'ASA afschakelen':90.00
+    ,'# dagen overwerk':2.79
+    ,'# druktemoment per dag':13.76
+    ,'# switchen per dag':7.85
+    ,'abandon rate call':5.00
+    ,'fte vast':56.30
+    ,'ASA':159.42
+    ,'kosten overuren':2349.11
+    ,'kosten vast':1268350.26
+    ,'maximale wachttijd per dag van call':2744.27
+    ,'overuren':73.41
+    ,'tijd switchen per keer':0.88
+    ,'wachttijd (dagen) per verzoek':1.00
+  },
+  {
+     '# wachtenden bijschakelen':12.00
+    ,'% klanttijd':75.00
+    ,'overwerk':0.00
+    ,'ASA afschakelen':38.00
+    ,'# dagen overwerk':2.79
+    ,'# druktemoment per dag':13.81
+    ,'# switchen per dag':7.52
+    ,'abandon rate call':4.94
+    ,'fte vast':62.30
+    ,'ASA':158.63
+    ,'kosten overuren':2349.11
+    ,'kosten vast':1464750.07
+    ,'maximale wachttijd per dag van call':2754.06
+    ,'overuren':73.41
+    ,'tijd switchen per keer':0.90
+    ,'wachttijd (dagen) per verzoek':1.00
+  },
+  {
+     '# wachtenden bijschakelen':9.00
+    ,'% klanttijd':91.00
+    ,'overwerk':0.00
+    ,'ASA afschakelen':84.00
+    ,'# dagen overwerk':2.79
+    ,'# druktemoment per dag':15.56
+    ,'# switchen per dag':7.73
+    ,'abandon rate call':6.12
+    ,'fte vast':49.08
+    ,'ASA':173.77
+    ,'kosten overuren':2349.11
+    ,'kosten vast':938474.20
+    ,'maximale wachttijd per dag van call':2871.16
+    ,'overuren':73.41
+    ,'tijd switchen per keer':0.89
+    ,'wachttijd (dagen) per verzoek':1.00
+  },
+  {
+     '# wachtenden bijschakelen':3.00
+    ,'% klanttijd':79.00
+    ,'overwerk':1.00
+    ,'ASA afschakelen':69.00
+    ,'# dagen overwerk':2.79
+    ,'# druktemoment per dag':13.61
+    ,'# switchen per dag':7.52
+    ,'abandon rate call':4.81
+    ,'fte vast':71.25
+    ,'ASA':158.15
+    ,'kosten overuren':2349.11
+    ,'kosten vast':1945050.35
+    ,'maximale wachttijd per dag van call':2731.14
+    ,'overuren':73.41
+    ,'tijd switchen per keer':0.90
+    ,'wachttijd (dagen) per verzoek':1.00
+  },
+  {
+     '# wachtenden bijschakelen':15.00
+    ,'% klanttijd':98.00
+    ,'overwerk':0.00
+    ,'ASA afschakelen':49.00
+    ,'# dagen overwerk':2.79
+    ,'# druktemoment per dag':13.77
+    ,'# switchen per dag':7.52
+    ,'abandon rate call':5.00
+    ,'fte vast':53.23
+    ,'ASA':160.19
+    ,'kosten overuren':2349.11
+    ,'kosten vast':1141462.26
+    ,'maximale wachttijd per dag van call':2758.97
+    ,'overuren':73.41
+    ,'tijd switchen per keer':0.90
+    ,'wachttijd (dagen) per verzoek':1.00
+  },
+  {
+     '# wachtenden bijschakelen':2.00
+    ,'% klanttijd':78.00
+    ,'overwerk':0.00
+    ,'ASA afschakelen':43.00
+    ,'# dagen overwerk':2.79
+    ,'# druktemoment per dag':13.63
+    ,'# switchen per dag':7.52
+    ,'abandon rate call':4.83
+    ,'fte vast':67.89
+    ,'ASA':158.45
+    ,'kosten overuren':2349.11
+    ,'kosten vast':1748692.59
+    ,'maximale wachttijd per dag van call':2759.92
+    ,'overuren':73.41
+    ,'tijd switchen per keer':0.90
+    ,'wachttijd (dagen) per verzoek':1.00
+  },
+  {
+     '# wachtenden bijschakelen':11.00
+    ,'% klanttijd':81.00
+    ,'overwerk':0.00
+    ,'ASA afschakelen':94.00
+    ,'# dagen overwerk':2.79
+    ,'# druktemoment per dag':23.07
+    ,'# switchen per dag':8.46
+    ,'abandon rate call':7.19
+    ,'fte vast':47.38
+    ,'ASA':258.91
+    ,'kosten overuren':2349.11
+    ,'kosten vast':782920.76
+    ,'maximale wachttijd per dag van call':3185.47
+    ,'overuren':73.41
+    ,'tijd switchen per keer':0.91
+    ,'wachttijd (dagen) per verzoek':0.95
+  },
+  {
+     '# wachtenden bijschakelen':12.00
+    ,'% klanttijd':78.00
+    ,'overwerk':0.00
+    ,'ASA afschakelen':22.00
+    ,'# dagen overwerk':2.79
+    ,'# druktemoment per dag':13.80
+    ,'# switchen per dag':7.52
+    ,'abandon rate call':5.00
+    ,'fte vast':60.18
+    ,'ASA':159.50
+    ,'kosten overuren':2349.11
+    ,'kosten vast':1372421.09
+    ,'maximale wachttijd per dag van call':2710.70
+    ,'overuren':73.41
+    ,'tijd switchen per keer':0.90
+    ,'wachttijd (dagen) per verzoek':1.00
+  },
+  {
+     '# wachtenden bijschakelen':10.00
+    ,'% klanttijd':70.00
+    ,'overwerk':1.00
+    ,'ASA afschakelen':28.00
+    ,'# dagen overwerk':2.79
+    ,'# druktemoment per dag':13.61
+    ,'# switchen per dag':7.52
+    ,'abandon rate call':4.79
+    ,'fte vast':71.07
+    ,'ASA':158.76
+    ,'kosten overuren':2349.11
+    ,'kosten vast':1836907.82
+    ,'maximale wachttijd per dag van call':2770.92
+    ,'overuren':73.41
+    ,'tijd switchen per keer':0.90
+    ,'wachttijd (dagen) per verzoek':1.00
+  },
+  {
+     '# wachtenden bijschakelen':14.00
+    ,'% klanttijd':87.00
+    ,'overwerk':1.00
+    ,'ASA afschakelen':58.00
+    ,'# dagen overwerk':2.93
+    ,'# druktemoment per dag':17.15
+    ,'# switchen per dag':7.57
+    ,'abandon rate call':6.50
+    ,'fte vast':49.66
+    ,'ASA':191.29
+    ,'kosten overuren':2392.36
+    ,'kosten vast':954206.01
+    ,'maximale wachttijd per dag van call':3082.02
+    ,'overuren':74.76
+    ,'tijd switchen per keer':0.91
+    ,'wachttijd (dagen) per verzoek':1.00
+  },
+  {
+     '# wachtenden bijschakelen':10.00
+    ,'% klanttijd':86.00
+    ,'overwerk':1.00
+    ,'ASA afschakelen':77.00
+    ,'# dagen overwerk':2.79
+    ,'# druktemoment per dag':13.61
+    ,'# switchen per dag':7.52
+    ,'abandon rate call':4.79
+    ,'fte vast':63.58
+    ,'ASA':158.76
+    ,'kosten overuren':2349.11
+    ,'kosten vast':1579160.19
+    ,'maximale wachttijd per dag van call':2770.92
+    ,'overuren':73.41
+    ,'tijd switchen per keer':0.90
+    ,'wachttijd (dagen) per verzoek':1.00
+  },
+  {
+     '# wachtenden bijschakelen':11.00
+    ,'% klanttijd':91.00
+    ,'overwerk':0.00
+    ,'ASA afschakelen':98.00
+    ,'# dagen overwerk':2.79
+    ,'# druktemoment per dag':14.92
+    ,'# switchen per dag':7.52
+    ,'abandon rate call':5.41
+    ,'fte vast':50.87
+    ,'ASA':164.37
+    ,'kosten overuren':2349.11
+    ,'kosten vast':1016180.56
+    ,'maximale wachttijd per dag van call':2785.05
+    ,'overuren':73.41
+    ,'tijd switchen per keer':0.90
+    ,'wachttijd (dagen) per verzoek':1.00
+  },
+  {
+     '# wachtenden bijschakelen':7.00
+    ,'% klanttijd':75.00
+    ,'overwerk':0.00
+    ,'ASA afschakelen':58.00
+    ,'# dagen overwerk':2.79
+    ,'# druktemoment per dag':13.61
+    ,'# switchen per dag':7.52
+    ,'abandon rate call':4.88
+    ,'fte vast':70.39
+    ,'ASA':158.96
+    ,'kosten overuren':2349.11
+    ,'kosten vast':1856611.19
+    ,'maximale wachttijd per dag van call':2742.91
+    ,'overuren':73.41
+    ,'tijd switchen per keer':0.90
+    ,'wachttijd (dagen) per verzoek':1.00
+  },
+  {
+     '# wachtenden bijschakelen':8.00
+    ,'% klanttijd':97.00
+    ,'overwerk':1.00
+    ,'ASA afschakelen':61.00
+    ,'# dagen overwerk':2.79
+    ,'# druktemoment per dag':14.12
+    ,'# switchen per dag':7.62
+    ,'abandon rate call':5.10
+    ,'fte vast':51.46
+    ,'ASA':160.97
+    ,'kosten overuren':2349.11
+    ,'kosten vast':1064011.37
+    ,'maximale wachttijd per dag van call':2711.32
+    ,'overuren':73.41
+    ,'tijd switchen per keer':0.90
+    ,'wachttijd (dagen) per verzoek':1.00
+  },
+  {
+     '# wachtenden bijschakelen':11.00
+    ,'% klanttijd':73.00
+    ,'overwerk':0.00
+    ,'ASA afschakelen':32.00
+    ,'# dagen overwerk':2.79
+    ,'# druktemoment per dag':19.10
+    ,'# switchen per dag':8.21
+    ,'abandon rate call':7.78
+    ,'fte vast':48.66
+    ,'ASA':204.90
+    ,'kosten overuren':2349.11
+    ,'kosten vast':792485.57
+    ,'maximale wachttijd per dag van call':2938.20
+    ,'overuren':73.41
+    ,'tijd switchen per keer':0.89
+    ,'wachttijd (dagen) per verzoek':0.97
+  },
+  {
+     '# wachtenden bijschakelen':16.00
+    ,'% klanttijd':73.00
+    ,'overwerk':1.00
+    ,'ASA afschakelen':97.00
+    ,'# dagen overwerk':2.79
+    ,'# druktemoment per dag':14.14
+    ,'# switchen per dag':7.52
+    ,'abandon rate call':5.20
+    ,'fte vast':57.03
+    ,'ASA':162.76
+    ,'kosten overuren':2349.11
+    ,'kosten vast':1207998.20
+    ,'maximale wachttijd per dag van call':2759.50
+    ,'overuren':73.41
+    ,'tijd switchen per keer':0.90
+    ,'wachttijd (dagen) per verzoek':1.00
+  },
+  {
+     '# wachtenden bijschakelen':6.00
+    ,'% klanttijd':96.00
+    ,'overwerk':0.00
+    ,'ASA afschakelen':86.00
+    ,'# dagen overwerk':2.79
+    ,'# druktemoment per dag':14.65
+    ,'# switchen per dag':8.38
+    ,'abandon rate call':5.49
+    ,'fte vast':48.99
+    ,'ASA':167.60
+    ,'kosten overuren':2349.11
+    ,'kosten vast':947485.98
+    ,'maximale wachttijd per dag van call':2784.62
+    ,'overuren':73.41
+    ,'tijd switchen per keer':0.88
+    ,'wachttijd (dagen) per verzoek':1.00
+  },
+  {
+     '# wachtenden bijschakelen':5.00
+    ,'% klanttijd':87.00
+    ,'overwerk':0.00
+    ,'ASA afschakelen':55.00
+    ,'# dagen overwerk':2.79
+    ,'# druktemoment per dag':14.10
+    ,'# switchen per dag':8.18
+    ,'abandon rate call':5.08
+    ,'fte vast':52.88
+    ,'ASA':164.77
+    ,'kosten overuren':2349.11
+    ,'kosten vast':1088432.60
+    ,'maximale wachttijd per dag van call':2844.39
+    ,'overuren':73.41
+    ,'tijd switchen per keer':0.87
+    ,'wachttijd (dagen) per verzoek':1.00
+  },
+  {
+     '# wachtenden bijschakelen':18.00
+    ,'% klanttijd':80.00
+    ,'overwerk':1.00
+    ,'ASA afschakelen':30.00
+    ,'# dagen overwerk':2.79
+    ,'# druktemoment per dag':13.70
+    ,'# switchen per dag':7.52
+    ,'abandon rate call':4.86
+    ,'fte vast':61.64
+    ,'ASA':158.47
+    ,'kosten overuren':2349.11
+    ,'kosten vast':1453615.61
+    ,'maximale wachttijd per dag van call':2729.56
+    ,'overuren':73.41
+    ,'tijd switchen per keer':0.90
+    ,'wachttijd (dagen) per verzoek':1.00
+  },
+  {
+     '# wachtenden bijschakelen':16.00
+    ,'% klanttijd':74.00
+    ,'overwerk':0.00
+    ,'ASA afschakelen':88.00
+    ,'# dagen overwerk':2.79
+    ,'# druktemoment per dag':13.61
+    ,'# switchen per dag':7.52
+    ,'abandon rate call':4.83
+    ,'fte vast':75.35
+    ,'ASA':157.48
+    ,'kosten overuren':2349.11
+    ,'kosten vast':2102753.61
+    ,'maximale wachttijd per dag van call':2722.16
+    ,'overuren':73.41
+    ,'tijd switchen per keer':0.90
+    ,'wachttijd (dagen) per verzoek':1.00
+  },
+  {
+     '# wachtenden bijschakelen':15.00
+    ,'% klanttijd':82.00
+    ,'overwerk':1.00
+    ,'ASA afschakelen':77.00
+    ,'# dagen overwerk':2.79
+    ,'# druktemoment per dag':13.61
+    ,'# switchen per dag':7.52
+    ,'abandon rate call':4.83
+    ,'fte vast':71.00
+    ,'ASA':157.48
+    ,'kosten overuren':2349.11
+    ,'kosten vast':1941657.09
+    ,'maximale wachttijd per dag van call':2722.16
+    ,'overuren':73.41
+    ,'tijd switchen per keer':0.90
+    ,'wachttijd (dagen) per verzoek':1.00
+  },
+  {
+     '# wachtenden bijschakelen':2.00
+    ,'% klanttijd':93.00
+    ,'overwerk':1.00
+    ,'ASA afschakelen':73.00
+    ,'# dagen overwerk':2.79
+    ,'# druktemoment per dag':13.61
+    ,'# switchen per dag':7.52
+    ,'abandon rate call':4.81
+    ,'fte vast':65.16
+    ,'ASA':158.15
+    ,'kosten overuren':2349.11
+    ,'kosten vast':1720216.97
+    ,'maximale wachttijd per dag van call':2731.14
+    ,'overuren':73.41
+    ,'tijd switchen per keer':0.90
+    ,'wachttijd (dagen) per verzoek':1.00
+  },
+  {
+     '# wachtenden bijschakelen':17.00
+    ,'% klanttijd':79.00
+    ,'overwerk':0.00
+    ,'ASA afschakelen':79.00
+    ,'# dagen overwerk':2.79
+    ,'# druktemoment per dag':13.80
+    ,'# switchen per dag':7.52
+    ,'abandon rate call':5.00
+    ,'fte vast':59.81
+    ,'ASA':159.50
+    ,'kosten overuren':2349.11
+    ,'kosten vast':1360764.04
+    ,'maximale wachttijd per dag van call':2710.70
+    ,'overuren':73.41
+    ,'tijd switchen per keer':0.90
+    ,'wachttijd (dagen) per verzoek':1.00
+  }]
+
+
+
+    // color scale for zscores
+    var colorscale = d3.scale.linear()
+        .domain([0,1])
+        .range(["blue", "red"])
+        .interpolate(d3.interpolateLab);
+
+    var pc0 = d3.parcoords()("#example")
+        .data(data)
+        .bundlingStrength(0) // set bundling strength
+        .smoothness(0)
+        .showControlPoints(false)
+        .hideAxis(["name"])
+        .composite("darken")
+        .render()
+        .brushMode("1D-axes")
+        .reorderable()  // enable brushing
+        .interactive();
+
+    pc0.svg.selectAll("text")
+        .style("font", "10px");
+
+//    change_color("obj 0");
+
+    // click label to activate coloring
+    pc0.svg.selectAll(".dimension")
+        .on("click", change_color)
+        .selectAll(".label")
+        .style("font-size", "10px");
+
+    // update color
+    function change_color(dimension) {
+        pc0.svg.selectAll(".dimension")
+            .style("font-weight", "normal")
+            .filter(function(d) { return d == dimension; })
+            .style("font-weight", "bold")
+
+        pc0.color(color(pc0.data(),dimension)).render()
+    }
+
+    // return color function based on plot and dimension
+    function color(col, dimension) {
+        var z = normalize(_(col).pluck(dimension).map(parseFloat))
+        return function(d) { return colorscale(z(d[dimension])) }
+    };
+
+    // color by zscore
+    function normalize(col) {
+        var n = col.length,
+            min = _(col).min()
+        max = _(col).max()
+
+        return function(d) {
+            return (d-min)/(max-min);
+        };
+    }
+</script>
+
+</html>
